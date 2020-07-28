@@ -14,7 +14,7 @@ function loading(){
     quoteContainer.hidden = true
 }
 
-//hide loader bring back container func
+//hide loader bring back container func - remove spinner
 function loaderComplete(){
     //first check if loader is hidden
     if(!loader.hidden){
@@ -41,7 +41,7 @@ async function getQuote() {
         const response = await fetch(proxyUrl + apiUrl) //combine both
         // const response = await fetch(apiUrl) //w/o proxy
         const data = await response.json()
-        console.log(data) //it will fail due to the cors policy
+        // console.log(data) //it will fail due to the cors policy
 
         //set the text content to apis data
         quoteText.textContent = data.quoteText
@@ -52,6 +52,15 @@ async function getQuote() {
             quoteAuthor.textContent = data.quoteAuthor
 
         }
+
+        //if quote length is greater than 120 chars, reduce fontsize
+        console.log('quote length',data.quoteText.length)
+         if(data.quoteText.length > 120){
+            quoteText.classList.add('long-quote')
+        }else{
+            quoteText.classList.remove('long-quote')
+        }
+
         //stop loading, show quote
         loaderComplete()
 
@@ -63,5 +72,5 @@ async function getQuote() {
 //add event listeners
 newQuote.addEventListener("click", getQuote)
 
-//at load time
-getQuote()
+//at load time - stop autoloading because the too many requests warning!!
+// getQuote()
